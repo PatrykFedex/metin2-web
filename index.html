@@ -2,10 +2,81 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Metin2 2D — Online (beta)</title>
+  <style>
+    html,body { margin:0; padding:0; background:#0b0e13; color:#e8eaf0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    #wrap { display:flex; flex-direction:column; align-items:center; gap:12px; padding:16px; }
+    #top { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; }
+    input, button { font: inherit; }
+    .input { background:#121723; color:#e8eaf0; border:1px solid #2a2e38; border-radius:8px; padding:8px 10px; }
+    .btn { background:#1f2430; border:1px solid #343a46; color:#e8eaf0; padding:8px 12px; border-radius:8px; cursor:pointer; }
+    .btn:hover { background:#2a3040; }
+    canvas { background:#0f141b; border:1px solid #2a2e38; border-radius:8px; box-shadow: 0 6px 24px rgba(0,0,0,.35); image-rendering: pixelated; }
+    #hud { width:1280px; max-width:94vw; background:#141821; border:1px solid #2a2e38; border-radius:8px; padding:8px 12px; }
+    .row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    #dialog, #overlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.5); }
+    #dialog .box, #overlay .box { background:#f6f8ff; color:#10131a; border-radius:10px; border:2px solid #2a2e38; width:min(820px, 92vw); max-height:80vh; padding:18px; overflow:auto; }
+    #inv { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); align-items:center; justify-content:center; }
+    #inv .box { background:#131826; color:#e8eaf0; border:1px solid #2a2e38; border-radius:10px; width:min(960px, 94vw); padding:16px; }
+    #inv .grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    #inv ul { list-style:none; padding:0; margin:0; max-height:52vh; overflow:auto; border:1px solid #2a2e38; border-radius:8px; padding:8px; }
+    #inv li { padding:6px 8px; border-bottom:1px dashed #2a2e38; display:flex; justify-content:space-between; gap:8px; }
+    #inv li:last-child { border-bottom:none; }
+    .tag { opacity:.85; font-size: 12px; }
+    #bigmap { position:fixed; inset:0; display:none; background:#0b0e13; }
+    #bigmap canvas { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:8px; border:1px solid #2a2e38; }
+  </style>
 </head>
 <body>
-  <canvas id="game" width="1280" height="800"></canvas>
+  <div id="wrap">
+    <div id="top">
+      <input class="input" id="name" placeholder="Twoja nazwa" style="min-width:160px" />
+      <input class="input" id="room" placeholder="Pokój (np. alpha)" style="min-width:160px" />
+      <button class="btn" id="btnConnect">Połącz</button>
+      <span id="connStatus">Offline</span>
+      <button class="btn" id="btnSave">Zapisz (G)</button>
+      <button class="btn" id="btnLoad">Wczytaj (L)</button>
+      <button class="btn" id="btnInv">Ekwipunek (I)</button>
+      <button class="btn" id="btnMap">Mapa (M)</button>
+      <button class="btn" id="btnHelp">Sterowanie</button>
+    </div>
+    <canvas id="game" width="1280" height="800"></canvas>
+    <div id="hud">
+      <div class="row">
+        <div id="stats"></div>
+        <div id="msg"></div>
+      </div>
+      <div class="row">
+        <div id="quests"></div>
+        <div id="hint">WASD/Strzałki – ruch • E/Enter – interakcja • I – ekwipunek • M – mapa • G/L – zapis/wczytaj • Esc – wyjście z okienek</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="dialog"><div class="box"><h3 id="dialogTitle"></h3><div id="dialogBody"></div><div style="text-align:right;margin-top:10px"><button class="btn" id="dialogClose">OK (Enter)</button></div></div></div>
+
+  <div id="inv">
+    <div class="box">
+      <h3>Ekwipunek</h3>
+      <div style="margin-bottom:8px">Założone: <span id="eqWeapon">Broń: -</span> • <span id="eqArmor">Zbroja: -</span> • <span id="eqAcc">Dodatek: -</span> <button class="btn" id="btnUnequip">Zdejmij wszystko (U)</button></div>
+      <div class="grid">
+        <div>
+          <h4>Twoje przedmioty</h4>
+          <ul id="invList"></ul>
+        </div>
+        <div>
+          <h4>Opis</h4>
+          <div id="invDesc">Kliknij przedmiot, aby założyć / użyć.</div>
+        </div>
+      </div>
+      <div style="text-align:right;margin-top:10px"><button class="btn" id="invClose">Zamknij (Esc)</button></div>
+    </div>
+  </div>
+
+  <div id="overlay"><div class="box"><div id="overlayBody"></div></div></div>
+  <div id="bigmap"><canvas id="bigmapCanvas" width="1200" height="700"></canvas></div>
+
   <script type="module" src="game.js"></script>
 </body>
 </html>

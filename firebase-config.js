@@ -1,4 +1,4 @@
-// firebase-config.js
+// firebase-config.js — UPEWNIJ SIĘ, ŻE MASZ TU SWÓJ PRAWIDŁOWY CONFIG
 export const firebaseConfig = {
   apiKey: "AIzaSyAKwaR7Pwax83vBxYetWYlQEo9ep0cS6As",
   authDomain: "mt2test-cc1a5.firebaseapp.com",
