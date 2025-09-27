@@ -14,11 +14,97 @@ function dialog(t,b){ dialogTitle.textContent=t; dialogBody.innerHTML=b; dialogE
 let app, db, auth, uid=null, roomId=null; const others=new Map();
 const state={name:'Bohater',loc:'miasto',x:2,y:13,hp:100,level:1,gold:100};
 
-function draw(){ ctx.fillStyle='#0f141b'; ctx.fillRect(0,0,1280,800);
-  ctx.fillStyle='#567a56'; for(let y=0;y<20;y++) for(let x=0;x<40;x++){ ctx.fillRect(x*TILE,y*TILE,TILE-1,TILE-1); }
-  if(roomId){ ctx.fillStyle='#e8eaf0'; ctx.fillText('Pokój: '+roomId, 20, 30); }
-  for(const [_,p] of others){ ctx.fillStyle='#83c5be'; ctx.fillRect(p.x*TILE+8, p.y*TILE+8, TILE-16, TILE-16); ctx.fillText(p.name||'Gracz', p.x*TILE+4, p.y*TILE+8); }
-  ctx.fillStyle='#e9ecff'; ctx.fillRect(state.x*TILE+8,state.y*TILE+8,TILE-16,TILE-16); ctx.fillText(nameInput.value||'Ty', state.x*TILE+4, state.y*TILE+8);
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // tło / siatka
+  ctx.fillStyle = '#0f141b';
+  ctx.fillRect(0, 0, 1280, 800);
+  ctx.fillStyle = '#567a56';
+  for (let y = 0; y < 20; y++) {
+    for (let x = 0; x < 40; x++) {
+      ctx.fillRect(x * TILE, y * TILE, TILE - 1, TILE - 1);
+    }
+  }
+
+  ctx.fillStyle = '#e8eaf0';
+  ctx.font = '12px Consolas, monospace';
+  if (roomId) ctx.fillText('Pokój: ' + roomId, 20, 20);
+
+  // === INNI GRACZE ===
+  for (const [id, p] of others) {
+    if (!p) continue;
+    ctx.fillStyle = '#83c5be';                          // turkus
+    ctx.fillRect(p.x * TILE + 8, p.y * TILE + 8, TILE - 16, TILE - 16);
+    if (p.name) ctx.fillText(p.name, p.x * TILE + 2, p.y * TILE + 8);
+  }
+
+  // === TY (na wierzchu) ===
+  ctx.fillStyle = '#e9ecff';
+  ctx.fillRect(state.x * TILE + 8, state.y * TILE + 8, TILE - 16, TILE - 16);
+  ctx.fillText(nameInput.value || 'Ty', state.x * TILE + 2, state.y * TILE + 8);
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // tło / siatka
+  ctx.fillStyle = '#0f141b';
+  ctx.fillRect(0, 0, 1280, 800);
+  ctx.fillStyle = '#567a56';
+  for (let y = 0; y < 20; y++) {
+    for (let x = 0; x < 40; x++) {
+      ctx.fillRect(x * TILE, y * TILE, TILE - 1, TILE - 1);
+    }
+  }
+
+  ctx.fillStyle = '#e8eaf0';
+  ctx.font = '12px Consolas, monospace';
+  if (roomId) ctx.fillText('Pokój: ' + roomId, 20, 20);
+
+  // === INNI GRACZE ===
+  for (const [id, p] of others) {
+    if (!p) continue;
+    ctx.fillStyle = '#83c5be';                          // turkus
+    ctx.fillRect(p.x * TILE + 8, p.y * TILE + 8, TILE - 16, TILE - 16);
+    if (p.name) ctx.fillText(p.name, p.x * TILE + 2, p.y * TILE + 8);
+  }
+
+  // === TY (na wierzchu) ===
+  ctx.fillStyle = '#e9ecff';
+  ctx.fillRect(state.x * TILE + 8, state.y * TILE + 8, TILE - 16, TILE - 16);
+  ctx.fillText(nameInput.value || 'Ty', state.x * TILE + 2, state.y * TILE + 8);
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // tło / siatka
+  ctx.fillStyle = '#0f141b';
+  ctx.fillRect(0, 0, 1280, 800);
+  ctx.fillStyle = '#567a56';
+  for (let y = 0; y < 20; y++) {
+    for (let x = 0; x < 40; x++) {
+      ctx.fillRect(x * TILE, y * TILE, TILE - 1, TILE - 1);
+    }
+  }
+
+  ctx.fillStyle = '#e8eaf0';
+  ctx.font = '12px Consolas, monospace';
+  if (roomId) ctx.fillText('Pokój: ' + roomId, 20, 20);
+
+  // === INNI GRACZE ===
+  for (const [id, p] of others) {
+    if (!p) continue;
+    ctx.fillStyle = '#83c5be';                          // turkus
+    ctx.fillRect(p.x * TILE + 8, p.y * TILE + 8, TILE - 16, TILE - 16);
+    if (p.name) ctx.fillText(p.name, p.x * TILE + 2, p.y * TILE + 8);
+  }
+
+  // === TY (na wierzchu) ===
+  ctx.fillStyle = '#e9ecff';
+  ctx.fillRect(state.x * TILE + 8, state.y * TILE + 8, TILE - 16, TILE - 16);
+  ctx.fillText(nameInput.value || 'Ty', state.x * TILE + 2, state.y * TILE + 8);
+}
+);
 }
 function loop(){ draw(); requestAnimationFrame(loop); }
 requestAnimationFrame(loop);
@@ -51,3 +137,4 @@ btnConnect.onclick = async () => {
     connStatus.textContent='Online: pokój '+roomId; btnConnect.textContent='Rozłącz';
   }catch(e){ console.error(e); dialog('Błąd połączenia', String(e)); }
 };
+
